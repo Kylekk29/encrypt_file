@@ -4,13 +4,15 @@ from tkinter import filedialog
 import os
 from tkinter import messagebox
 def load_file():
-    global opened_file_path
+    global opened_file_name
+    global opened_file_paths
     global opened_file_type
-    opened_file_path = filedialog.askopenfilename(filetypes=[('All file','*.*')],title='load file')
-    opened_file_info = os.path.splitext(os.path.basename(opened_file_path))
-    opened_file_name = opened_file_info[0]
-    opened_file_type = opened_file_info[1]
-    opened_file_load_label = tk.Label(win, text=opened_file_name, bg="white", fg="black", font=("Arial", 16))
+    opened_file_paths = filedialog.askopenfilenames(filetypes=[('All file','*.*')],title='load file')
+    opened_file_info = [os.path.splitext(os.path.basename(path)) for path in opened_file_paths ]
+    opened_file_name = [opened_file_info[i][0] for i in range(len(opened_file_info))]
+    opened_file_type = [opened_file_info[i][1] for i in range(len(opened_file_info))]
+    opened_file_load_label = tk.Label(win, text=','.join(opened_file_name), bg="white", fg="black", 
+                                      font=("Arial", 12),wraplength=350,justify="left")
     opened_file_load_label.place(x=200, y=5, width=400, height=50)
 
 def load_key():
@@ -34,24 +36,29 @@ def generate_key():
 
 def encrypt_file():
     f=Fernet(key)
-    with open(opened_file_path,'rb') as original_file:
-        encrypted = f.encrypt(original_file.read())
-    save_path = filedialog.asksaveasfilename(defaultextension=opened_file_type, filetypes=[("All files","*.*")]
-                                             ,initialfile='encrypted_file',initialdir=opened_file_path)
-    with open(save_path,'wb') as encrypted_file:
-        encrypted_file.write(encrypted)
+    for i,path in enumerate(opened_file_paths):
+        with open(path,'rb') as original_file:
+            encrypted = f.encrypt(original_file.read())
+            save_path = filedialog.asksaveasfilename(defaultextension=opened_file_type[i], filetypes=[("All files","*.*")]
+                                             ,initialfile=f'{opened_file_name[i]}_encrypted',initialdir=opened_file_paths[i])
+        with open(save_path,'wb') as encrypted_file:
+            encrypted_file.write(encrypted)
 
 def decrypt_file():
     f=Fernet(key)
-    with open(opened_file_path,'rb') as original_file:
-        decrypted = f.decrypt(original_file.read())
-    try:
-        save_path = filedialog.asksaveasfilename(defaultextension=opened_file_type, filetypes=[("All files","*.*")]
-                                                 ,initialfile='decrypt_file',initialdir=opened_file_path)
-        with open(save_path,'wb') as decrypted_file:
-            decrypted_file.write(decrypted)
-    except:
-        print('error')
+    for i, path in enumerate(opened_file_paths):
+        with open(path,'rb') as original_file:
+            decrypted = f.decrypt(original_file.read())
+        try:
+            save_path = filedialog.asksaveasfilename(defaultextension=opened_file_type, 
+                                                     filetypes=[("All files","*.*")] ,
+                                                     initialfile=f'{opened_file_name[i]}_decrypted',
+                                                 initialdir=opened_file_paths)
+            if save_path:
+                with open(save_path, 'wb') as decrypted_file:
+                    decrypted_file.write(decrypted)
+        except Exception as e:
+            print(f'Error decrypting file {path}: {e}')
 
 win = tk.Tk()
 win.config(bg="white")
