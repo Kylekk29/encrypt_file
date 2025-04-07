@@ -1,47 +1,62 @@
-Here are more detailed insights into the `encrypt.py` script:
+Here are more detailed insights and a user guide for the `encrypt.py` script:
 
-### Overview
-The script uses the `cryptography` library's `Fernet` symmetric encryption to secure files. It provides a GUI for ease of use, allowing users to manage file encryption and decryption without needing to write code.
+### Detailed Overview
 
-### Components
+The `encrypt.py` script is a Python application that provides an intuitive way to encrypt and decrypt files using symmetric encryption. It uses the `cryptography` library's `Fernet` module for secure encryption. The GUI is built with `tkinter`, making it accessible for users without programming experience.
 
-1. **Imports**:
-   - `Fernet` from `cryptography.fernet`: For encryption and decryption.
-   - `tkinter`: For building the GUI.
-   - `filedialog` and `messagebox`: For file selection dialogs and message displays.
-   - `os`: For file path manipulations.
+### Key Features Explained
 
-2. **Global Variables**:
-   - `opened_file_path`: Stores the path of the file to be encrypted or decrypted.
-   - `opened_file_type`: Stores the file type (extension).
-   - `key`: Stores the encryption key.
-   - `opened_key_path`: Stores the path to the loaded key.
+1. **Load Multiple Files**:
+- Users can select multiple files for encryption or decryption using a file dialog. The names of the selected files are displayed in the GUI.
 
-3. **Functions**:
-   - **`load_file()`**: Opens a file dialog to select a file, displays the name in the GUI, and saves its path and type.
-   - **`load_key()`**: Loads an encryption key from a specified file and displays the key's name in the GUI.
-   - **`generate_key()`**: Generates a new encryption key, saves it to a user-specified location, and shows the path via a message box.
-   - **`encrypt_file()`**: Encrypts the selected file using the loaded key and prompts the user to save the encrypted file.
-   - **`decrypt_file()`**: Decrypts the selected file and prompts the user to save the decrypted version.
+2. **Load Key**:
+- Users can load a previously saved encryption key from a `.key` file. This key is essential for encrypting and decrypting files.
 
-4. **GUI Setup**:
-   - A `tkinter` window is created with buttons for each action (load file, load key, generate key, encrypt, decrypt).
-   - Each button is linked to its corresponding function, providing a straightforward interface.
+3. **Generate Key**:
+- Users can generate a new encryption key, which is securely stored in a specified location. The key is crucial for encrypting and decrypting files.
 
-5. **Error Handling**:
-   - Basic error handling in the `decrypt_file()` function to catch exceptions during the decryption process.
+4. **Encrypt Files**:
+- Selected files are encrypted with the loaded key, and users can specify the name and location for the encrypted output files.
 
-### Workflow
-1. **Load a File**: User clicks "Load File" to select the file to encrypt or decrypt.
-2. **Load or Generate Key**: User can either load an existing key or generate a new one.
-3. **Encrypt/Decrypt**: Depending on the action chosen, the user can encrypt or decrypt the selected file, saving the output to a specified location.
+5. **Decrypt Files**:
+- Encrypted files can be decrypted back to their original form, with users choosing the names and locations for the decrypted files.
 
-### Requirements
-- Python environment with `tkinter` and `cryptography` libraries installed.
+### User Guide
 
-### Use Cases
-- Protecting sensitive documents.
-- Securing files before sharing them.
-- Learning about file encryption and GUI development in Python.
+#### Requirements
+- **Python**: Ensure you have Python installed (preferably version 3.x).
+- **Libraries**: Install the required libraries using pip:
+```bash
+pip install cryptography
+```
 
-This script serves as a practical tool for anyone needing basic file encryption capabilities while also providing an educational resource for understanding Python programming and GUI design.
+#### Running the Script
+1. **Launch the Application**:
+- Run the script by executing `python encrypt.py` in your terminal or command prompt.
+
+2. **Load Files**:
+- Click the "Load File" button to open a file dialog. Select one or more files you wish to encrypt or decrypt.
+- The names of the selected files will appear in the GUI.
+
+3. **Load or Generate Key**:
+- Click "Load Key" to select an existing key file.
+- Alternatively, click "Generate Key" to create a new key. Choose a location to save the key file.
+
+4. **Encrypt Files**:
+- Click the "Encrypt File" button. For each selected file, specify where to save the encrypted version and the filename. The files will be encrypted using the loaded key.
+
+5. **Decrypt Files**:
+- Click the "Decrypt File" button. For each encrypted file, specify where to save the decrypted version and the filename. The files will be decrypted using the same key.
+
+6. **Error Handling**:
+- If an error occurs during decryption (e.g., incorrect key), an error message will be printed in the console.
+
+### Example Use Case
+- **Personal Security**: Individuals can use this tool to encrypt personal documents before sharing them, ensuring that only intended recipients can access the information.
+- **Business Applications**: Companies can secure sensitive data files, such as contracts and financial reports, to prevent unauthorized access.
+
+### Additional Notes
+- Ensure you keep your encryption key secure. Losing the key means you won't be able to decrypt your files.
+- Always test the encryption and decryption process with non-sensitive files before using it on important documents to familiarize yourself with the application.
+
+This script is a practical solution for file security, combining ease of use with robust encryption methods.
